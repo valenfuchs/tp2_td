@@ -116,11 +116,18 @@ int main(int argc, char** argv) {
     float tiempo3 = resultado3.first.second;
     cout << distancia_total3 << " " << tiempo3 << endl;
 */
+/*
 
 
-    pair<pair<int, float>,vector<vector<int>>> sol_relocate = relocateGAP(resultado, matriz_distancias, matriz_demandas);
+
+    pair<pair<int, float>,pair<vector<vector<int>>, vector<int>>> sol_relocate = relocateGAP(resultado3, matriz_distancias, matriz_demandas);
     int distancia_total2 = sol_relocate.first.first;
     float tiempo2 = sol_relocate.first.second;
+    cout << distancia_total2 << " " << tiempo2 << endl;
+*/
+    pair<pair<int, float>,pair<vector<vector<int>>, vector<int>>> sol_swap = swapGAP(resultado, matriz_distancias, matriz_demandas);
+    int distancia_total2 = sol_swap.first.first;
+    float tiempo2 = sol_swap.first.second;
     cout << distancia_total2 << " " << tiempo2 << endl;
 
     // map<int, vector<int>> depositoOrdenado = ordenar(matriz_distancias, 0, capacidades);
