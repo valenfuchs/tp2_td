@@ -73,7 +73,7 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> relocateGAP(pair<pa
 
 
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> swapGAP(pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> solucion_inicial, vector<vector<int>> distancias, vector<vector<int>> demandas) {
+pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> swapGAP(pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> solucion_inicial, vector<vector<int>> distancias, vector<vector<int>> demandas, const string& output, const string& input) {
     auto inicio = chrono::steady_clock::now(); 
     vector<vector<int>> solucion = solucion_inicial.second.first;
     vector<int> capacidades_modif = solucion_inicial.second.second;
@@ -132,7 +132,7 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> swapGAP(pair<pair<i
     }
 
 
-    guardarCSV(solucion, "swap.csv");
+    guardarCSV(solucion, filename);
     auto final = chrono::steady_clock::now();   // finalizamos el timer
     float tiempo = chrono::duration_cast<chrono::microseconds>(final-inicio).count(); // obtenemos el tiempo de ejecucion 
     //armamos la nueva solucion
