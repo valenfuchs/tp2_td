@@ -5,16 +5,19 @@
 #include <sstream>
 #include <vector>
 #include <chrono>
+#include <random>
+#include <algorithm>
 #include <map>
 #include "heuristicas_golosas.cpp"
 #include "busqueda_local.cpp"
+#include "metaheuristica.cpp"
 
 using namespace std;
 
 int main(int argc, char** argv) {
     string filename = "instances/gap/gap_a/a05100"; 
     cout << "Reading file " << filename << endl;
-    
+    /*
     pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> resultado1 = depositoMasCercano(filename, "deposito1.csv");
     int distancia_total1 = resultado1.first.first;
     float tiempo1 = resultado1.first.second;
@@ -40,6 +43,12 @@ int main(int argc, char** argv) {
     int distancia_swap1 = sol_swap1.first.first;
     float tiempo_swap1 = sol_swap1.first.second;
     cout << distancia_swap1 << " " << tiempo_swap1 << endl;
+*/
 
-    return 0;
+    pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> resultado1 = depositoMasCercano(filename, "deposito1.csv");
+    int distancia_total1 = resultado1.first.first;
+    float tiempo1 = resultado1.first.second;
+    cout << distancia_total1 << " " << tiempo1 << endl;
+
+
 }
