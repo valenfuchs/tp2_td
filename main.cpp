@@ -100,21 +100,28 @@ int main(int argc, char** argv) {
 
         file.close();
     }
-    
-    pair<int, float> resultado = depositoMasCercano(matriz_distancias, matriz_demandas, capacidades);
-    int distancia_total = resultado.first;
-    float tiempo = resultado.second;
-    cout << distancia_total << " " << tiempo << endl;
 
-    pair<int, float> resultado2 = menorRatio(matriz_distancias, matriz_demandas, capacidades);
-    int distancia_total2 = resultado2.first;
-    float tiempo2 = resultado2.second;
+    pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> resultado = depositoMasCercano(matriz_distancias, matriz_demandas, capacidades);
+    int distancia_total = resultado.first.first;
+    float tiempo = resultado.first.second;
+    cout << distancia_total << " " << tiempo << endl;
+/*
+    pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> resultado2 = menorRatio(matriz_distancias, matriz_demandas, capacidades);
+    int distancia_total2 = resultado2.first.first;
+    float tiempo2 = resultado2.first.second;
     cout << distancia_total2 << " " << tiempo2 << endl;
 
-    pair<int, float> resultado3 = vendedorMasCercano(matriz_distancias, matriz_demandas, capacidades);
-    int distancia_total3 = resultado3.first;
-    float tiempo3 = resultado3.second;
+    pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> resultado3 = vendedorMasCercano(matriz_distancias, matriz_demandas, capacidades);
+    int distancia_total3 = resultado3.first.first;
+    float tiempo3 = resultado3.first.second;
     cout << distancia_total3 << " " << tiempo3 << endl;
+*/
+
+
+    pair<pair<int, float>,vector<vector<int>>> sol_relocate = relocateGAP(resultado, matriz_distancias, matriz_demandas);
+    int distancia_total2 = sol_relocate.first.first;
+    float tiempo2 = sol_relocate.first.second;
+    cout << distancia_total2 << " " << tiempo2 << endl;
 
     // map<int, vector<int>> depositoOrdenado = ordenar(matriz_distancias, 0, capacidades);
     // std::cout << "Diccionario ordenado: " << std::endl;

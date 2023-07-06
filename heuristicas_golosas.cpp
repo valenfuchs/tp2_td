@@ -24,7 +24,7 @@ void guardarCSV(const vector<vector<int>>& matriz, const string& filename) {
     }
 }
 
-pair<int, float> depositoMasCercano(vector<vector<int>> distancias, vector<vector<int>> demandas, vector<int> capacidades) {
+pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> depositoMasCercano(vector<vector<int>> distancias, vector<vector<int>> demandas, vector<int> &capacidades) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
     int i, j;       // i recorrerá las filas (vendedores), j las columnas (depósitos)
     int distancia_total = 0;
@@ -59,10 +59,10 @@ pair<int, float> depositoMasCercano(vector<vector<int>> distancias, vector<vecto
     auto final = chrono::steady_clock::now();   // finalizamos el timer
     float tiempo = chrono::duration_cast<chrono::microseconds>(final-inicio).count(); // obtenemos el tiempo de ejecucion 
     
-    return make_pair(distancia_total, tiempo);
+    return make_pair(make_pair(distancia_total, tiempo),make_pair(asignaciones, capacidades));
 }
 
-pair<int, float> menorRatio(vector<vector<int>> distancias, vector<vector<int>> demandas, vector<int> capacidades) {
+pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> menorRatio(vector<vector<int>> distancias, vector<vector<int>> demandas, vector<int> &capacidades) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
     int i, j;       // i recorrerá las filas (vendedores), j las columnas (depósitos)
     int distancia_total = 0;
@@ -96,8 +96,8 @@ pair<int, float> menorRatio(vector<vector<int>> distancias, vector<vector<int>> 
     guardarCSV(asignaciones, "asignaciones_ratio.csv");
     auto final = chrono::steady_clock::now();   // finalizamos el timer
     float tiempo = chrono::duration_cast<chrono::microseconds>(final-inicio).count(); // obtenemos el tiempo de ejecucion 
-    
-    return make_pair(distancia_total, tiempo);
+
+    return make_pair(make_pair(distancia_total, tiempo),make_pair(asignaciones, capacidades));
 }
 
 map<int, vector<int>> ordenarDeposito(vector<vector<int>> distancias, int j, vector<int> capacidades) {
@@ -124,7 +124,7 @@ map<int, vector<int>> ordenarDeposito(vector<vector<int>> distancias, int j, vec
     return indicesDepositoOrdenado;
 }
 
-pair<int, float> vendedorMasCercano(vector<vector<int>> distancias, vector<vector<int>> demandas, vector<int> capacidades) {
+pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> vendedorMasCercano(vector<vector<int>> distancias, vector<vector<int>> demandas, vector<int> &capacidades) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
     int distancia_total = 0;
     vector<vector<int>> asignaciones(capacidades.size(), vector<int>());
@@ -147,7 +147,7 @@ pair<int, float> vendedorMasCercano(vector<vector<int>> distancias, vector<vecto
                         if(esta_asignado == vendedores_asignados.end()){
                             vendedores_asignados.push_back(vendedores[k]);
                             distancia_total += distancia;
-                            capacidades[i] -= 
+                            capacidades[i] -= demandas[vendedores[k]][i];
                             asignaciones[i].push_back(vendedores[k]);
                         }
                     }
@@ -165,6 +165,6 @@ pair<int, float> vendedorMasCercano(vector<vector<int>> distancias, vector<vecto
     auto final = chrono::steady_clock::now();   // finalizamos el timer
     float tiempo = chrono::duration_cast<chrono::microseconds>(final-inicio).count(); // obtenemos el tiempo de ejecucion 
     
-    return make_pair(distancia_total, tiempo);
+   return make_pair(make_pair(distancia_total, tiempo),make_pair(asignaciones, capacidades));
 }
 
