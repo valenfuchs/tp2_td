@@ -5,6 +5,7 @@
 #include <sstream>
 #include <vector>
 #include <chrono>
+#include <map>
 #include "heuristicas_golosas.cpp"
 #include "busqueda_local.cpp"
 
@@ -15,7 +16,9 @@ int main(int argc, char** argv) {
     cout << "Reading file " << filename << endl;
 
     vector<vector<int>> matriz_distancias; // Matriz de tamaño rows x cols
+    vector<vector<int>> matriz_distancias_traspuesta;
     vector<vector<int>> matriz_demandas; // Matriz de tamaño rows x cols
+    vector<vector<int>> matriz_demandas_traspuesta;
     vector<int> capacidades;
 
     // Abrir el archivo de datos
@@ -31,77 +34,97 @@ int main(int argc, char** argv) {
         getline(file, line);
         int bloque = 0;
 
-        // for (; bloque < rows; ++bloque) {
-        //     vector<int> fila;
-        //     for (int j = 0; j < cols; ++j) {
-        //         int dato;
-        //         if (file >> dato) {
-        //             fila.push_back(dato);
-        //         }
-        //     }
-        //     matriz_distancias.push_back(fila);
-        // }
-
-        // for (; bloque < rows*2; ++bloque) {
-        //     vector<int> fila;
-        //     for (int j = 0; j < cols; ++j) {
-        //         int dato;
-        //         if (file >> dato) {
-        //             fila.push_back(dato);
-        //         }
-        //     }
-        //     matriz_demandas.push_back(fila);
-        // }
-
-        for (int j = 0; j < cols; ++j) {
-            vector<int> columna_distancias;
-            vector<int> columna_demandas;
-
-            for (int bloque = 0; bloque < rows; ++bloque) {
+        for (; bloque < rows; ++bloque) {
+            vector<int> fila;
+            for (int j = 0; j < cols; ++j) {
                 int dato;
                 if (file >> dato) {
-                columna_distancias.push_back(dato);
+                    fila.push_back(dato);
+                }
             }
+            matriz_distancias_traspuesta.push_back(fila);
         }
-        matriz_distancias.push_back(columna_distancias);
 
-        for (int bloque = 0; bloque < rows; ++bloque) {
-            int dato;
-            if (file >> dato) {
-                columna_demandas.push_back(dato);
+        for (; bloque < 2*rows; ++bloque) {
+            vector<int> fila;
+            for (int j = 0; j < cols; ++j) {
+                int dato;
+                if (file >> dato) {
+                    fila.push_back(dato);
+                }
             }
+            matriz_demandas_traspuesta.push_back(fila);
         }
-        matriz_demandas.push_back(columna_demandas);
-    }
 
-        for(int i=0; i < rows; ++i) {
+        // for(; bloque < rows; ++bloque) {
+        //     int dato;
+        //     if (file >> dato) {
+        //         capacidades.push_back(dato);
+        //     }
+        // }
+
+        for (; bloque < 2*rows+rows; ++bloque) {
             int dato;
             if (file >> dato) {
                 capacidades.push_back(dato);
             }
         }
+    
+        for (size_t i = 0; i < matriz_distancias_traspuesta[0].size(); ++i) {
+            vector<int> fila_distancias;
+            vector<int> fila_demandas;
 
-        // cout << "Matriz de distancias:" << endl;
-        // for (const auto& fila : matriz_distancias) {
+            for (size_t j = 0; j < matriz_distancias_traspuesta.size(); ++j) {
+                fila_distancias.push_back(matriz_distancias_traspuesta[j][i]);
+            }
+            matriz_distancias.push_back(fila_distancias);
+
+            for (size_t j = 0; j < matriz_demandas_traspuesta.size(); ++j) {
+                fila_demandas.push_back(matriz_demandas_traspuesta[j][i]);
+            }
+            matriz_demandas.push_back(fila_demandas);
+        }
+
+        // cout << "Matriz de demandas:" << endl;
+        // for (const auto& fila : matriz_demandas) {
         //     for (int dato : fila) {
         //         cout << dato << " ";
         //     }
         //     cout << endl;
         // }
 
+        // for (int i = 0; i < capacidades.size(); ++i) {
+        //     cout << capacidades[i] << " ";
+        // }
+        // cout << endl;
+
         file.close();
     }
     
-    pair<pair<int, float>, vector<vector<int>>> resultado = depositoMasCercano(matriz_distancias, matriz_demandas, capacidades);
-    int distancia_total = resultado.first.first;
-    float tiempo = resultado.first.second;
-    vector<vector<int>> asignaciones = resultado.second;
+    pair<int, float> resultado = depositoMasCercano(matriz_distancias, matriz_demandas, capacidades);
+    int distancia_total = resultado.first;
+    float tiempo = resultado.second;
     cout << distancia_total << " " << tiempo << endl;
-    for (const auto& fila : asignaciones) {
-        for (const auto& elemento : fila) {
-            std::cout << elemento << ' ';
-        }
-        std::cout << std::endl;
-    }
+
+    pair<int, float> resultado2 = menorRatio(matriz_distancias, matriz_demandas, capacidades);
+    int distancia_total2 = resultado2.first;
+    float tiempo2 = resultado2.second;
+    cout << distancia_total2 << " " << tiempo2 << endl;
+
+    pair<int, float> resultado3 = vendedorMasCercano(matriz_distancias, matriz_demandas, capacidades);
+    int distancia_total3 = resultado3.first;
+    float tiempo3 = resultado3.second;
+    cout << distancia_total3 << " " << tiempo3 << endl;
+
+    // map<int, vector<int>> depositoOrdenado = ordenar(matriz_distancias, 0, capacidades);
+    // std::cout << "Diccionario ordenado: " << std::endl;
+    // for (const auto& elemento : depositoOrdenado) {
+    //     std::cout << "Clave: " << elemento.first << ", Valores: ";
+    //     const std::vector<int>& vectorValores = elemento.second;
+    //     for (const auto& valor : vectorValores) {
+    //         std::cout << valor << " ";
+    //     }
+    //     std::cout << std::endl;
+    // }
     return 0;
 }
