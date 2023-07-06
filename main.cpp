@@ -49,6 +49,11 @@ int main(int argc, char** argv) {
     int distancia_total1 = resultado1.first.first;
     float tiempo1 = resultado1.first.second;
     cout << distancia_total1 << " " << tiempo1 << endl;
+    
+    pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> resultado2 = grasp(100, filename, "grasp.csv");
+    int distancia_total2 = resultado2.first.first;
+    float tiempo2 = resultado2.first.second;
+    cout << distancia_total2 << " " << tiempo2 << endl;
 
 
 }
