@@ -1,3 +1,4 @@
+#pragma once
 #include <string>
 #include <iostream>
 #include <list>
@@ -5,29 +6,17 @@
 #include <fstream>
 #include <sstream>
 #include <chrono>
-//#include "heuristicas_golosas.cpp"
+#include "archivo.cpp"
 
 using namespace std;
 
-/*void guardarCSV(const vector<vector<int>>& matriz, const string& filename) {
-    ofstream file(filename);
-    if (file.is_open()) {
-        for (const auto& fila : matriz) {
-            for (int i = 0; i < fila.size(); ++i) {
-                file << fila[i];
-                if (i != fila.size() - 1) {
-                    file << ",";
-                }
-            }
-            file << endl;
-        }
-        file.close();
-        cout << "La matriz de asignaciones se ha guardado en el archivo " << filename << endl;
-    }
-}*/
-
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> relocateGAP(pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> solucion_inicial, vector<vector<int>> distancias, vector<vector<int>> demandas) {
+pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> relocateGAP(pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> solucion_inicial, const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now(); 
+
+    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    vector<vector<int>> demandas = datos.first.first;
+    vector<vector<int>> distancias = datos.first.second;
+
     vector<vector<int>> solucion = solucion_inicial.second.first;
     vector<int> capacidades_modif = solucion_inicial.second.second;
     int mejor_distancia = solucion_inicial.first.first; //inicializamos la mejor distancia como la inicial //inicializamos la mejor distancia como la inicial
@@ -63,7 +52,7 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> relocateGAP(pair<pa
         capacidades_modif[cambio_optimo.second.second] -= demandas[cambio_optimo.first.second][cambio_optimo.second.second];
     }
 
-    guardarCSV(solucion, "relocate.csv");
+    guardarCSV(solucion, output);
     auto final = chrono::steady_clock::now();   // finalizamos el timer
     float tiempo = chrono::duration_cast<chrono::microseconds>(final-inicio).count(); // obtenemos el tiempo de ejecucion 
     //armamos la nueva solucion
@@ -73,8 +62,13 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> relocateGAP(pair<pa
 
 
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> swapGAP(pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> solucion_inicial, vector<vector<int>> distancias, vector<vector<int>> demandas, const string& output, const string& input) {
+pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> swapGAP(pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> solucion_inicial, const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now(); 
+
+    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    vector<vector<int>> demandas = datos.first.first;
+    vector<vector<int>> distancias = datos.first.second;
+
     vector<vector<int>> solucion = solucion_inicial.second.first;
     vector<int> capacidades_modif = solucion_inicial.second.second;
     int vendedor1;
@@ -132,7 +126,7 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> swapGAP(pair<pair<i
     }
 
 
-    guardarCSV(solucion, filename);
+    guardarCSV(solucion, output);
     auto final = chrono::steady_clock::now();   // finalizamos el timer
     float tiempo = chrono::duration_cast<chrono::microseconds>(final-inicio).count(); // obtenemos el tiempo de ejecucion 
     //armamos la nueva solucion

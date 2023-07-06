@@ -6,13 +6,16 @@
 #include <vector>
 #include <chrono>
 #include <map>
-#include "heuristicas_golosas.cpp"
-#include "busqueda_local.cpp"
+#ifndef LEER_ARCHIVO_H
+#define LEER_ARCHIVO_H
+
+
+
 
 using namespace std;
 
 
-pair<pair<<vector<vector<int>>, vector<vector<int>>>, vector<int>> leer_archivo(const string& filename){
+pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> leer_archivo(const string& filename){
 
     vector<vector<int>> matriz_distancias; // Matriz de tamaño rows x cols
     vector<vector<int>> matriz_distancias_traspuesta;
@@ -62,12 +65,12 @@ pair<pair<<vector<vector<int>>, vector<vector<int>>>, vector<int>> leer_archivo(
             //     }
             // }
 
-            for (; bloque < 2*rows+rows; ++bloque) {
-                int dato;
-                if (file >> dato) {
-                    capacidades.push_back(dato);
-                }
+        for (; bloque < 2*rows+rows; ++bloque) {
+            int dato;
+            if (file >> dato) {
+                capacidades.push_back(dato);
             }
+        }
         
             for (size_t i = 0; i < matriz_distancias_traspuesta[0].size(); ++i) {
                 vector<int> fila_distancias;
@@ -99,4 +102,7 @@ pair<pair<<vector<vector<int>>, vector<vector<int>>>, vector<int>> leer_archivo(
 
         file.close();
     }
+
+    return make_pair(make_pair(matriz_demandas, matriz_distancias), capacidades);
 }
+#endif

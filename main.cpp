@@ -15,44 +15,31 @@ int main(int argc, char** argv) {
     string filename = "instances/gap/gap_a/a05100"; 
     cout << "Reading file " << filename << endl;
     
-    pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> resultado = depositoMasCercano(matriz_distancias, matriz_demandas, capacidades);
-    int distancia_total = resultado.first.first;
-    float tiempo = resultado.first.second;
-    cout << distancia_total << " " << tiempo << endl;
-/*
-    pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> resultado2 = menorRatio(matriz_distancias, matriz_demandas, capacidades);
+    pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> resultado1 = depositoMasCercano(filename, "deposito1.csv");
+    int distancia_total1 = resultado1.first.first;
+    float tiempo1 = resultado1.first.second;
+    cout << distancia_total1 << " " << tiempo1 << endl;
+
+    pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> resultado2 = menorRatio(filename, "ratio1.csv");
     int distancia_total2 = resultado2.first.first;
     float tiempo2 = resultado2.first.second;
     cout << distancia_total2 << " " << tiempo2 << endl;
 
-    pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> resultado3 = vendedorMasCercano(matriz_distancias, matriz_demandas, capacidades);
+    pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> resultado3 = vendedorMasCercano(filename, "vendedor1.csv");
     int distancia_total3 = resultado3.first.first;
     float tiempo3 = resultado3.first.second;
     cout << distancia_total3 << " " << tiempo3 << endl;
-*/
-/*
 
 
+    pair<pair<int, float>,pair<vector<vector<int>>, vector<int>>> sol_relocate1 = relocateGAP(resultado1, filename, "relocate1.csv");
+    int distancia_relocate1 = sol_relocate1.first.first;
+    float tiempo_relocate1 = sol_relocate1.first.second;
+    cout << distancia_relocate1 << " " << tiempo_relocate1 << endl;
 
-    pair<pair<int, float>,pair<vector<vector<int>>, vector<int>>> sol_relocate = relocateGAP(resultado3, matriz_distancias, matriz_demandas);
-    int distancia_total2 = sol_relocate.first.first;
-    float tiempo2 = sol_relocate.first.second;
-    cout << distancia_total2 << " " << tiempo2 << endl;
-*/
-    pair<pair<int, float>,pair<vector<vector<int>>, vector<int>>> sol_swap = swapGAP(resultado, matriz_distancias, matriz_demandas);
-    int distancia_total2 = sol_swap.first.first;
-    float tiempo2 = sol_swap.first.second;
-    cout << distancia_total2 << " " << tiempo2 << endl;
+    pair<pair<int, float>,pair<vector<vector<int>>, vector<int>>> sol_swap1 = swapGAP(resultado1, filename, "swap1.csv");
+    int distancia_swap1 = sol_swap1.first.first;
+    float tiempo_swap1 = sol_swap1.first.second;
+    cout << distancia_swap1 << " " << tiempo_swap1 << endl;
 
-    // map<int, vector<int>> depositoOrdenado = ordenar(matriz_distancias, 0, capacidades);
-    // std::cout << "Diccionario ordenado: " << std::endl;
-    // for (const auto& elemento : depositoOrdenado) {
-    //     std::cout << "Clave: " << elemento.first << ", Valores: ";
-    //     const std::vector<int>& vectorValores = elemento.second;
-    //     for (const auto& valor : vectorValores) {
-    //         std::cout << valor << " ";
-    //     }
-    //     std::cout << std::endl;
-    // }
     return 0;
 }

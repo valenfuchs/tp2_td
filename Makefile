@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -std=c++17
-SRC = main.cpp heuristicas_golosas.cpp busqueda_local.cpp
+SRC = main.cpp heuristicas_golosas.cpp busqueda_local.cpp archivo.cpp
 OBJ = $(SRC:.cpp=.o)
 EXEC = gap_simulator
 

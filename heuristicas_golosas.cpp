@@ -1,9 +1,11 @@
+#pragma once
 #include <string>
 #include <iostream>
 #include <list>
 #include <vector>
 #include <algorithm>
 #include <chrono>
+#include "archivo.cpp"
 
 using namespace std;
 
@@ -24,8 +26,14 @@ void guardarCSV(const vector<vector<int>>& matriz, const string& filename) {
     }
 }
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> depositoMasCercano(vector<vector<int>> distancias, vector<vector<int>> demandas, vector<int> &capacidades) {
+pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> depositoMasCercano(const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
+    
+    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    vector<vector<int>> demandas = datos.first.first;
+    vector<vector<int>> distancias = datos.first.second;
+    vector<int> capacidades = datos.second;
+    
     int i, j;       // i recorrerá las filas (vendedores), j las columnas (depósitos)
     int distancia_total = 0;
     vector<vector<int>> asignaciones(capacidades.size(), vector<int>());
@@ -55,15 +63,21 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> depositoMasCercano(
             asignaciones[masCercano].push_back(i);
         }
     }
-    guardarCSV(asignaciones, "asignaciones.csv");
+    guardarCSV(asignaciones, output);
     auto final = chrono::steady_clock::now();   // finalizamos el timer
     float tiempo = chrono::duration_cast<chrono::microseconds>(final-inicio).count(); // obtenemos el tiempo de ejecucion 
     
     return make_pair(make_pair(distancia_total, tiempo),make_pair(asignaciones, capacidades));
 }
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> menorRatio(vector<vector<int>> distancias, vector<vector<int>> demandas, vector<int> &capacidades) {
+pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> menorRatio(const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
+
+    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    vector<vector<int>> demandas = datos.first.first;
+    vector<vector<int>> distancias = datos.first.second;
+    vector<int> capacidades = datos.second;
+
     int i, j;       // i recorrerá las filas (vendedores), j las columnas (depósitos)
     int distancia_total = 0;
     vector<vector<int>> asignaciones(capacidades.size(), vector<int>());
@@ -93,13 +107,14 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> menorRatio(vector<v
             asignaciones[masCercano].push_back(i);
         }
     }
-    guardarCSV(asignaciones, "asignaciones_ratio.csv");
+    guardarCSV(asignaciones, output);
     auto final = chrono::steady_clock::now();   // finalizamos el timer
     float tiempo = chrono::duration_cast<chrono::microseconds>(final-inicio).count(); // obtenemos el tiempo de ejecucion 
 
     return make_pair(make_pair(distancia_total, tiempo),make_pair(asignaciones, capacidades));
 }
 
+// funcion auxiliar
 map<int, vector<int>> ordenarDeposito(vector<vector<int>> distancias, int j, vector<int> capacidades) {
     vector<int> dist;
     vector<int> dist_ordenada;
@@ -124,8 +139,14 @@ map<int, vector<int>> ordenarDeposito(vector<vector<int>> distancias, int j, vec
     return indicesDepositoOrdenado;
 }
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> vendedorMasCercano(vector<vector<int>> distancias, vector<vector<int>> demandas, vector<int> &capacidades) {
+pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> vendedorMasCercano(const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
+
+    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    vector<vector<int>> demandas = datos.first.first;
+    vector<vector<int>> distancias = datos.first.second;
+    vector<int> capacidades = datos.second;
+
     int distancia_total = 0;
     vector<vector<int>> asignaciones(capacidades.size(), vector<int>());
     vector<map<int, vector<int>>> depositosOrdenados;
@@ -161,7 +182,7 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> vendedorMasCercano(
     if(vendedores_asignados.size() != distancias.size()) {
         distancia_total += 3*distMax*(distancias.size()-vendedores_asignados.size());
     }
-    guardarCSV(asignaciones, "asignaciones_vendedores.csv");
+    guardarCSV(asignaciones, output);
     auto final = chrono::steady_clock::now();   // finalizamos el timer
     float tiempo = chrono::duration_cast<chrono::microseconds>(final-inicio).count(); // obtenemos el tiempo de ejecucion 
     
