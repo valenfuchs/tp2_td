@@ -74,9 +74,6 @@ int main(int argc, char** argv) {
     vector<float> tiempo_grasp1;
     vector<float> tiempo_grasp2;
     vector<float> tiempo_grasp3;
-
-    pair<int, int> n;
-    // cantidad de depositos, cantidad de vendedores
     
     
     string folderPath = "instancias";  
@@ -149,11 +146,8 @@ int main(int argc, char** argv) {
     escribirCSV(swap2, tiempo_swap2, "swapRatio.csv");
     escribirCSV(swap3, tiempo_swap3, "swapVen.csv");
     
-    escribirCSV(swap3, tiempo_swap3, "swapVen.csv");
-
+    escribirCSV(grasp1, tiempo_grasp1, "grasp100.csv");
+    escribirCSV(grasp2, tiempo_grasp2, "grasp300.csv");
+    escribirCSV(grasp3, tiempo_grasp3, "grasp500.csv");
     
-    vector<float> grasp1;
-    vector<float> grasp2;
-    vector<float> grasp3;
-
 }
