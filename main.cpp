@@ -82,62 +82,78 @@ int main(int argc, char** argv) {
     string folderPath = "instancias";  
     for (const auto& entry : fs::directory_iterator(folderPath)) {
         if (fs::is_regular_file(entry)) {
-            cout << entry.path().filename().string();/*
-            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_dep_cercano = depositoMasCercano(entry.path().filename().string(), "deposito1.csv");
+        
+            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_dep_cercano = depositoMasCercano("instancias/" + entry.path().filename().string(), "deposito1.csv");
             dist_dep_cercano.push_back(res_dep_cercano.first.first);
             tiempo_dep_cercano.push_back(res_dep_cercano.first.second);
 
-            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_menor_ratio = menorRatio(entry.path().filename().string(), "ratio1.csv");
+            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_menor_ratio = menorRatio("instancias/" + entry.path().filename().string(), "ratio1.csv");
             dist_menor_ratio.push_back(res_menor_ratio.first.first);
             tiempo_menor_ratio.push_back(res_menor_ratio.first.second);
 
-            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_ven_cercano = vendedorMasCercano(entry.path().filename().string(), "vendedor1.csv");
+            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_ven_cercano = vendedorMasCercano("instancias/" + entry.path().filename().string(), "vendedor1.csv");
             dist_ven_cercano.push_back(res_ven_cercano.first.first);
             tiempo_ven_cercano.push_back(res_ven_cercano.first.second);
 
             // relocate
-            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_relocate1 = relocateGAP(res_dep_cercano, entry.path().filename().string(), "relocate1.csv");
+            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_relocate1 = relocateGAP(res_dep_cercano, "instancias/" + entry.path().filename().string(), "relocate1.csv");
             relocate1.push_back(res_relocate1.first.first);
             tiempo_relocate1.push_back(res_relocate1.first.second);
 
-            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_relocate2 = relocateGAP(res_menor_ratio, entry.path().filename().string(), "relocate2.csv");
+            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_relocate2 = relocateGAP(res_menor_ratio, "instancias/" + entry.path().filename().string(), "relocate2.csv");
             relocate2.push_back(res_relocate2.first.first);
             tiempo_relocate2.push_back(res_relocate2.first.second);
             
-            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_relocate3 = relocateGAP(res_ven_cercano, entry.path().filename().string(), "relocate3.csv");
+            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_relocate3 = relocateGAP(res_ven_cercano, "instancias/" + entry.path().filename().string(), "relocate3.csv");
             relocate3.push_back(res_relocate3.first.first);
             tiempo_relocate3.push_back(res_relocate3.first.second);
             
             // swap
-            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_swap1 = swapGAP(res_dep_cercano, entry.path().filename().string(), "swap1.csv");
+            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_swap1 = swapGAP(res_dep_cercano, "instancias/" + entry.path().filename().string(), "swap1.csv");
             swap1.push_back(res_swap1.first.first);
             tiempo_swap1.push_back(res_swap1.first.second);
 
-            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_swap2 = swapGAP(res_menor_ratio, entry.path().filename().string(), "swap2.csv");
+            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_swap2 = swapGAP(res_menor_ratio, "instancias/" + entry.path().filename().string(), "swap2.csv");
             swap2.push_back(res_swap2.first.first);
             tiempo_swap2.push_back(res_swap2.first.second);
 
-            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_swap3 = swapGAP(res_ven_cercano, entry.path().filename().string(), "swap3.csv");
+            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_swap3 = swapGAP(res_ven_cercano, "instancias/" + entry.path().filename().string(), "swap3.csv");
             swap3.push_back(res_swap3.first.first);
             tiempo_swap3.push_back(res_swap3.first.second);
 
             // grasp
-            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_grasp1 = grasp(100, entry.path().filename().string(), "grasp1.csv");
+            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_grasp1 = grasp(100, "instancias/" + entry.path().filename().string(), "grasp1.csv");
             grasp1.push_back(res_grasp1.first.first);
             tiempo_grasp1.push_back(res_grasp1.first.second);
 
-            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_grasp2 = grasp(300, entry.path().filename().string(), "grasp2.csv");
+            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_grasp2 = grasp(300, "instancias/" + entry.path().filename().string(), "grasp2.csv");
             grasp2.push_back(res_grasp2.first.first);
             tiempo_grasp2.push_back(res_grasp2.first.second);
 
-            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_grasp3 = grasp(500, entry.path().filename().string(), "grasp3.csv");
+            pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> res_grasp3 = grasp(500, "instancias/" + entry.path().filename().string(), "grasp3.csv");
             grasp3.push_back(res_grasp3.first.first);
             tiempo_grasp3.push_back(res_grasp3.first.second);
-            */
+            
         }
     }
 
     escribirCSV(dist_dep_cercano, tiempo_dep_cercano, "depMasCercano.csv");
     escribirCSV(dist_menor_ratio, tiempo_menor_ratio,"menorRatio.csv");
     escribirCSV(dist_ven_cercano, tiempo_ven_cercano, "venMasCercano.csv");
+
+    escribirCSV(relocate1, tiempo_relocate1, "relocateDep.csv");
+    escribirCSV(relocate2, tiempo_relocate2, "relocateRatio.csv");
+    escribirCSV(relocate3, tiempo_relocate3, "relocateVen.csv");
+    
+    escribirCSV(swap1, tiempo_swap1, "swapDep.csv");
+    escribirCSV(swap2, tiempo_swap2, "swapRatio.csv");
+    escribirCSV(swap3, tiempo_swap3, "swapVen.csv");
+    
+    escribirCSV(swap3, tiempo_swap3, "swapVen.csv");
+
+    
+    vector<float> grasp1;
+    vector<float> grasp2;
+    vector<float> grasp3;
+
 }
