@@ -83,11 +83,13 @@ pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> swap(pair<pair<fl
 }
 
 
-
+// funcion auxiliar
+// es igual a la heuristica de deposito mas cercano solo que recorre los vendedores de forma random
 pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> random_depositoMasCercano(const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
     
     pair<pair<vector<vector<int>>, vector<vector<float>>>, vector<int>> datos = leer_archivo(input);
+    // leemos el archivo input para obtener las demandas, distancias y capacidades
     vector<vector<int>> demandas = datos.first.first;
     vector<vector<float>> distancias = datos.first.second;
     vector<int> capacidades = datos.second;
@@ -130,6 +132,7 @@ pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> random_depositoMa
             asignaciones[masCercano].push_back(i);
         }
     }
+    guardarCSV(asignaciones, output);
     auto final = chrono::steady_clock::now();   // finalizamos el timer
     float tiempo = chrono::duration_cast<chrono::microseconds>(final-inicio).count(); // obtenemos el tiempo de ejecucion 
 
@@ -141,26 +144,36 @@ pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> random_depositoMa
 
 pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> grasp(int n_iter, const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
+    // leemos el archivo input para obtener las demandas, distancias y capacidades
     pair<pair<vector<vector<int>>, vector<vector<float>>>, vector<int>> datos = leer_archivo(input);
     vector<vector<int>> demandas = datos.first.first;
     vector<vector<float>> distancias = datos.first.second;
     vector<int> capacidades = datos.second;
+
     pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> sol_random;
     float mejor_distancia=999999.0;
     vector<vector<int>> mejor_asignacion(capacidades.size(), vector<int>());
     vector<int> mejor_capacidades = datos.second;
 
+    // realizamos n iteraciones
     for (int n=0; n < n_iter; n++) {
 
+        // construimos la solucion golosa con un componente random
+        // para eso, utilizamos la funcion auxiliar random_depositoMasCercano
+        // en la que aleatorizamos el orden en que recorremos la lista de vendedores
         sol_random = random_depositoMasCercano(input, output);
 
+        // le aplicamos a esa solucion el operador de busqueda local swap
         pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> sol_swap = swap(sol_random, input, output);
 
+        // guardamos esta nueva solución
         float distancia_swap = sol_swap.first.first;
         vector<vector<int>> asignacion_swap = sol_swap.second.first;
         vector<int> capacidades_swap = sol_swap.second.second;
 
+        // comparamos nuestra nueva solucion con la que tenemos guardada como la mejor encontrada hasta el momento
         if (distancia_swap < mejor_distancia){
+            // si es menor la distancia total recorrida (que es lo que queremos minimizar), reemplazamos la mejor solucion por la actual
             mejor_distancia = distancia_swap;
             mejor_asignacion = asignacion_swap;
             mejor_capacidades = capacidades_swap;

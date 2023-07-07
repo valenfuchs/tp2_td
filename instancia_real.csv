@@ -1,0 +1,13 @@
+código, distancia_total, tiempo
+depositoMasCercano,784.6,1.3753e+06
+menorRatio,9560.2,1.44678e+06
+vendedorMasCercano,1770.3,6.17873e+07
+relocateDep,784.6,2.25759e+06
+relocateRatio,9537.2,2.26787e+06
+relocateVen,1754.4,2.32606e+06
+swapDep,781.7,2.35459e+06
+swapRatio,9355.31,2.21482e+06
+swapVen,1713.5,2.12474e+06
+grasp100,768.001,3.579e+08
+grasp300,768.3,1.09079e+09
+grasp500,765.3,2.1018e+09

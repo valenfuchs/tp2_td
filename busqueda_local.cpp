@@ -48,6 +48,7 @@ pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> relocateGAP(pair<
     }
     //relocate
     if (mejor_distancia != solucion_inicial.first.first){
+        //si encontro una mejor distancia que la original
         solucion[cambio_optimo.second.first].erase(solucion[cambio_optimo.second.first].begin()+cambio_optimo.first.first); 
         solucion[cambio_optimo.second.second].push_back(cambio_optimo.first.second);
         capacidades_modif[cambio_optimo.second.first] += demandas[cambio_optimo.first.second][cambio_optimo.second.first];
@@ -57,7 +58,7 @@ pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> relocateGAP(pair<
     guardarCSV(solucion, output);
     auto final = chrono::steady_clock::now();   // finalizamos el timer
     float tiempo = chrono::duration_cast<chrono::microseconds>(final-inicio).count(); // obtenemos el tiempo de ejecucion 
-    //armamos la nueva solucion
+    //armamos la nueva solucion a devolver
     return make_pair(make_pair(mejor_distancia, tiempo), make_pair(solucion, capacidades_modif));
 }
 
