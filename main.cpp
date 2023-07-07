@@ -77,6 +77,8 @@ int main(int argc, char** argv) {
     
     
     string folderPath = "instancias";  
+
+    /*
     for (const auto& entry : fs::directory_iterator(folderPath)) {
         if (fs::is_regular_file(entry)) {
         
@@ -149,5 +151,6 @@ int main(int argc, char** argv) {
     escribirCSV(grasp1, tiempo_grasp1, "grasp100.csv");
     escribirCSV(grasp2, tiempo_grasp2, "grasp300.csv");
     escribirCSV(grasp3, tiempo_grasp3, "grasp500.csv");
-    
+*/
+
 }
