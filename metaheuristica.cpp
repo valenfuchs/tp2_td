@@ -12,12 +12,13 @@
 
 using namespace std;
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> swap(pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> solucion_inicial, const string& input, const string& output) {
+// utilizamos swap como funcion auxiliar
+pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> swap(pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> solucion_inicial, const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now(); 
 
-    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    pair<pair<vector<vector<int>>, vector<vector<float>>>, vector<int>> datos = leer_archivo(input);
     vector<vector<int>> demandas = datos.first.first;
-    vector<vector<int>> distancias = datos.first.second;
+    vector<vector<float>> distancias = datos.first.second;
 
     vector<vector<int>> solucion = solucion_inicial.second.first;
     vector<int> capacidades_modif = solucion_inicial.second.second;
@@ -25,8 +26,8 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> swap(pair<pair<int,
     int vendedor2;
     int capacidad_j1;
     int capacidad_j2;
-    int mejor_distancia = solucion_inicial.first.first;
-    int distancia_actual;
+    float mejor_distancia = solucion_inicial.first.first;
+    float distancia_actual;
     pair<pair<int, int>,pair<int, int>> cambio_optimo;              // guardamos <<j1, j2>, <i1, i2>>
     pair<int, int> vendedores;
 
@@ -81,12 +82,14 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> swap(pair<pair<int,
     return make_pair(make_pair(mejor_distancia, tiempo), make_pair(solucion, capacidades_modif));
 }
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> random_depositoMasCercano(const string& input, const string& output) {
+
+
+pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> random_depositoMasCercano(const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
     
-    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    pair<pair<vector<vector<int>>, vector<vector<float>>>, vector<int>> datos = leer_archivo(input);
     vector<vector<int>> demandas = datos.first.first;
-    vector<vector<int>> distancias = datos.first.second;
+    vector<vector<float>> distancias = datos.first.second;
     vector<int> capacidades = datos.second;
     vector<int> i_random;
      // randomizamos el orden en que recorremos los vendedores
@@ -98,14 +101,14 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> random_depositoMasC
     shuffle(i_random.begin(), i_random.end(), gen);
 
     int i, j;       // i recorrerá las filas (vendedores), j las columnas (depósitos)
-    int distancia_total = 0;
+    float distancia_total = 0.0;
     vector<vector<int>> asignaciones(capacidades.size(), vector<int>());
 
     for(int k = 0; k < i_random.size(); ++k) {    // distancias.size() es la cantidad de vendedores
         i = i_random[k];
         int masCercano;                 // guardamos el índice del depósito más cercano hasta el momento
-        int distMin = 999999;
-        int distMax = -1;
+        float distMin = 999999.0;
+        float distMax = -1.0;
         bool asignado = false;
         
         for(int j = 0; j < distancias[i].size(); j++) {
@@ -136,14 +139,14 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> random_depositoMasC
 
 
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> grasp(int n_iter, const string& input, const string& output) {
+pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> grasp(int n_iter, const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
-    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    pair<pair<vector<vector<int>>, vector<vector<float>>>, vector<int>> datos = leer_archivo(input);
     vector<vector<int>> demandas = datos.first.first;
-    vector<vector<int>> distancias = datos.first.second;
+    vector<vector<float>> distancias = datos.first.second;
     vector<int> capacidades = datos.second;
-    pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> sol_random;
-    int mejor_distancia=999999;
+    pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> sol_random;
+    float mejor_distancia=999999.0;
     vector<vector<int>> mejor_asignacion(capacidades.size(), vector<int>());
     vector<int> mejor_capacidades = datos.second;
 
@@ -151,9 +154,9 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> grasp(int n_iter, c
 
         sol_random = random_depositoMasCercano(input, output);
 
-        pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> sol_swap = swap(sol_random, input, output);
+        pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> sol_swap = swap(sol_random, input, output);
 
-        int distancia_swap = sol_swap.first.first;
+        float distancia_swap = sol_swap.first.first;
         vector<vector<int>> asignacion_swap = sol_swap.second.first;
         vector<int> capacidades_swap = sol_swap.second.second;
 

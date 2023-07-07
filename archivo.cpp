@@ -15,17 +15,16 @@
 using namespace std;
 
 
-pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> leer_archivo(const string& filename){
+pair<pair<vector<vector<int>>, vector<vector<float>>>, vector<int>> leer_archivo(const string& filename){
 
-    vector<vector<int>> matriz_distancias; // Matriz de tamaño rows x cols
-    vector<vector<int>> matriz_distancias_traspuesta;
+    vector<vector<float>> matriz_distancias; // Matriz de tamaño rows x cols
+    vector<vector<float>> matriz_distancias_traspuesta;
     vector<vector<int>> matriz_demandas; // Matriz de tamaño rows x cols
     vector<vector<int>> matriz_demandas_traspuesta;
     vector<int> capacidades;
 
     // Abrir el archivo de datos
     ifstream file(filename);
-
     if (file.is_open()) {
         int rows, cols = 0;
         file >> rows;
@@ -35,12 +34,14 @@ pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> leer_archivo(c
         string line;
         getline(file, line);
         int bloque = 0;
+        
 
         for (; bloque < rows; ++bloque) {
-            vector<int> fila;
-            for (int j = 0; j < cols; ++j) {
-                int dato;
+            vector<float> fila;
+            for (int j = 0; j < cols; ++j) {\
+                float dato;
                 if (file >> dato) {
+                    
                     fila.push_back(dato);
                 }
             }
@@ -73,7 +74,7 @@ pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> leer_archivo(c
         }
         
             for (size_t i = 0; i < matriz_distancias_traspuesta[0].size(); ++i) {
-                vector<int> fila_distancias;
+                vector<float> fila_distancias;
                 vector<int> fila_demandas;
 
                 for (size_t j = 0; j < matriz_distancias_traspuesta.size(); ++j) {
@@ -86,14 +87,14 @@ pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> leer_archivo(c
                 }
                 matriz_demandas.push_back(fila_demandas);
             }
-
-            // cout << "Matriz de demandas:" << endl;
-            // for (const auto& fila : matriz_demandas) {
-            //     for (int dato : fila) {
-            //         cout << dato << " ";
-            //     }
-            //     cout << endl;
-            // }
+/*
+            cout << "Matriz de distancias:" << endl;
+            for (const auto& fila : matriz_distancias) {
+                for (int dato : fila) {
+                    cout << dato << " ";
+                }
+                cout << endl;
+            }*/
 
             // for (int i = 0; i < capacidades.size(); ++i) {
             //     cout << capacidades[i] << " ";
@@ -102,7 +103,6 @@ pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> leer_archivo(c
 
         file.close();
     }
-
     return make_pair(make_pair(matriz_demandas, matriz_distancias), capacidades);
 }
 #endif

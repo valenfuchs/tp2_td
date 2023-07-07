@@ -10,18 +10,20 @@
 
 using namespace std;
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> relocateGAP(pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> solucion_inicial, const string& input, const string& output) {
+pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> relocateGAP(pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> solucion_inicial, const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now(); 
 
-    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    pair<pair<vector<vector<int>>, vector<vector<float>>>, vector<int>> datos = leer_archivo(input);
+    // armamos las matrices de demandas y distancias
     vector<vector<int>> demandas = datos.first.first;
-    vector<vector<int>> distancias = datos.first.second;
+    vector<vector<float>> distancias = datos.first.second;
 
+    // inizializamos utilizando la solucion inicial
     vector<vector<int>> solucion = solucion_inicial.second.first;
     vector<int> capacidades_modif = solucion_inicial.second.second;
-    int mejor_distancia = solucion_inicial.first.first; //inicializamos la mejor distancia como la inicial //inicializamos la mejor distancia como la inicial
+    float mejor_distancia = solucion_inicial.first.first; 
     vector<vector<int>> asignaciones(solucion.size(), vector<int>()); 
-    int distancia_actual;
+    float distancia_actual;
     pair<pair<int, int>,pair<int, int>> cambio_optimo;  // guardamos el vendedor, en que deposito esta y a cual cambiarlo
     //cada vector es un deposito, con los vendedores asignados como elementos
     int vendedor;
@@ -29,11 +31,11 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> relocateGAP(pair<pa
         for(int i = 0; i < solucion[j].size(); ++i) {          //recorremos los vendedores asignados al deposito j
             vendedor = solucion[j][i];
             for(int k = 0; k < solucion.size(); ++k){
-                distancia_actual = solucion_inicial.first.first;              //guardamos la distancia para este relocate
+                distancia_actual = solucion_inicial.first.first;              // guardamos la distancia para este relocate
                 if(j!=k && capacidades_modif[k]>=demandas[vendedor][k]){      // si la demanda de ese vendedor entra en ese deposito
                     if (distancias[vendedor][k] < distancias[vendedor][j]){   // si es optimo cambiar ese vendedor de deposito
                         distancia_actual += distancias[vendedor][k];          
-                        distancia_actual -= distancias[vendedor][j];
+                        distancia_actual -= distancias[vendedor][j];           
                         if (distancia_actual < mejor_distancia){              // si es optimo realizar el cambio con respecto al optimo hasta ahora
                             mejor_distancia = distancia_actual;
                             cambio_optimo.first = make_pair(i, vendedor);
@@ -62,12 +64,12 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> relocateGAP(pair<pa
 
 
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> swapGAP(pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> solucion_inicial, const string& input, const string& output) {
+pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> swapGAP(pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> solucion_inicial, const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now(); 
 
-    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    pair<pair<vector<vector<int>>, vector<vector<float>>>, vector<int>> datos = leer_archivo(input);
     vector<vector<int>> demandas = datos.first.first;
-    vector<vector<int>> distancias = datos.first.second;
+    vector<vector<float>> distancias = datos.first.second;
 
     vector<vector<int>> solucion = solucion_inicial.second.first;
     vector<int> capacidades_modif = solucion_inicial.second.second;
@@ -75,8 +77,8 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> swapGAP(pair<pair<i
     int vendedor2;
     int capacidad_j1;
     int capacidad_j2;
-    int mejor_distancia = solucion_inicial.first.first;
-    int distancia_actual;
+    float mejor_distancia = solucion_inicial.first.first;
+    float distancia_actual;
     pair<pair<int, int>,pair<int, int>> cambio_optimo;              // guardamos <<j1, j2>, <i1, i2>>
     pair<int, int> vendedores;
 

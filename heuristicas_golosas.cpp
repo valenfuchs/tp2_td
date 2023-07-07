@@ -26,22 +26,22 @@ void guardarCSV(const vector<vector<int>>& matriz, const string& filename) {
     }
 }
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> depositoMasCercano(const string& input, const string& output) {
+pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> depositoMasCercano(const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
     
-    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    pair<pair<vector<vector<int>>, vector<vector<float>>>, vector<int>> datos = leer_archivo(input);
     vector<vector<int>> demandas = datos.first.first;
-    vector<vector<int>> distancias = datos.first.second;
+    vector<vector<float>> distancias = datos.first.second;
     vector<int> capacidades = datos.second;
     
     int i, j;       // i recorrerá las filas (vendedores), j las columnas (depósitos)
-    int distancia_total = 0;
+    float distancia_total = 0.0;
     vector<vector<int>> asignaciones(capacidades.size(), vector<int>());
 
     for(int i = 0; i < distancias.size(); ++i) {    // distancias.size() es la cantidad de vendedores
         int masCercano;                 // guardamos el índice del depósito más cercano hasta el momento
-        int distMin = 999999;
-        int distMax = -1;
+        float distMin = 999999.0;
+        float distMax = -1.0;
         bool asignado = false;
         
         for(int j = 0; j < distancias[i].size(); j++) {
@@ -70,22 +70,22 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> depositoMasCercano(
     return make_pair(make_pair(distancia_total, tiempo),make_pair(asignaciones, capacidades));
 }
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> menorRatio(const string& input, const string& output) {
+pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> menorRatio(const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
 
-    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    pair<pair<vector<vector<int>>, vector<vector<float>>>, vector<int>> datos = leer_archivo(input);
     vector<vector<int>> demandas = datos.first.first;
-    vector<vector<int>> distancias = datos.first.second;
+    vector<vector<float>> distancias = datos.first.second;
     vector<int> capacidades = datos.second;
 
     int i, j;       // i recorrerá las filas (vendedores), j las columnas (depósitos)
-    int distancia_total = 0;
+    float distancia_total = 0.0;
     vector<vector<int>> asignaciones(capacidades.size(), vector<int>());
 
     for(i = 0; i < distancias.size(); ++i) {    // distancias.size() es la cantidad de depositos
         int masCercano;                 // guardamos el índice del depósito más cercano hasta el momento
-        int distMin = 999999;
-        int distMax = -1;
+        float distMin = 999999.0;
+        float distMax = -1.0;
         bool asignado = false;
         
         for(j = 0; j < distancias[i].size(); ++j) {
@@ -115,10 +115,12 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> menorRatio(const st
 }
 
 // funcion auxiliar
-map<int, vector<int>> ordenarDeposito(vector<vector<int>> distancias, int j, vector<int> capacidades) {
-    vector<int> dist;
-    vector<int> dist_ordenada;
-    map<int, vector<int>> indicesDepositoOrdenado;
+map<float, vector<int>> ordenarDeposito(vector<vector<float>> distancias, int j, vector<int> capacidades) {
+    vector<float> dist;
+    vector<float> dist_ordenada;
+    map<float, vector<int>> indicesDepositoOrdenado;  
+    // ordenamos de menor a mayor las distancias de todos los vendedores a ese deposito
+    // mapeamos cada distancia a la posicion original del vendedor/es a la que corresponde
 
     
     for(int i = 0; i < distancias.size(); i++){
@@ -139,19 +141,19 @@ map<int, vector<int>> ordenarDeposito(vector<vector<int>> distancias, int j, vec
     return indicesDepositoOrdenado;
 }
 
-pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> vendedorMasCercano(const string& input, const string& output) {
+pair<pair<float, float>,pair<vector<vector<int>>,vector<int>>> vendedorMasCercano(const string& input, const string& output) {
     auto inicio = chrono::steady_clock::now();      // iniciamos un timer
 
-    pair<pair<vector<vector<int>>, vector<vector<int>>>, vector<int>> datos = leer_archivo(input);
+    pair<pair<vector<vector<int>>, vector<vector<float>>>, vector<int>> datos = leer_archivo(input);
     vector<vector<int>> demandas = datos.first.first;
-    vector<vector<int>> distancias = datos.first.second;
+    vector<vector<float>> distancias = datos.first.second;
     vector<int> capacidades = datos.second;
 
-    int distancia_total = 0;
+    float distancia_total = 0.0;
     vector<vector<int>> asignaciones(capacidades.size(), vector<int>());
-    vector<map<int, vector<int>>> depositosOrdenados;
+    vector<map<float, vector<int>>> depositosOrdenados;
     vector<int> vendedores_asignados;
-    int distMax = -1;
+    float distMax = -1.0;
 
     for(int j = 0; j < capacidades.size(); j++) {
         depositosOrdenados.push_back(ordenarDeposito(distancias, j, capacidades));
@@ -160,7 +162,7 @@ pair<pair<int, float>,pair<vector<vector<int>>,vector<int>>> vendedorMasCercano(
     for(int i = 0; i < depositosOrdenados.size(); ++i) {
         for(int j = 0; j < depositosOrdenados[i].size(); ++j) {
             for(auto it = depositosOrdenados[i].begin(); it != depositosOrdenados[i].end(); ++it){
-                int distancia = it->first;
+                float distancia = it->first;
                 vector<int> vendedores = it->second;
                 for(int k = 0; k < vendedores.size(); ++k){
                     if(demandas[vendedores[k]][i] <= capacidades[i]) {
